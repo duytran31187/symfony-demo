@@ -3,3 +3,13 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+blog_show:
+    path: /blog/show/{slug}
+    controller: App\Controller\BlogController::show
+    methods: GET|HEAD
+
+blog_list:
+    path: /blog/list
+    controller: App\Controller\BlogController::list
+    methods: GET
