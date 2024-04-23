@@ -10,13 +10,19 @@ class BlogController extends AbstractController
 {
     public function list(): Response
     {
-        return $this->render('blog/list.html.twig');
+        return $this->render('blog/list.html.twig', [
+            'slugs' => [
+                'my-first-post',
+                'second-post',
+                'third-post',
+            ]
+        ]);
     }
 
     public function show($slug): Response
     {
-        return new Response(
-            '<html><body>Slug: '.$slug.'</body></html>'
-        );
+        return $this->render('blog/blog.html.twig', [
+            'slug' => $slug,
+        ]);
     }
 }
