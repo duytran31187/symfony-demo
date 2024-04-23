@@ -1,5 +1,10 @@
 <h1>Blog list page</h1>
 <h3>Author info</h3>
+{# the image lives at "public/images/logo.png" #}
+<img id="node-image" src="{{ asset('images/node.png') }}" alt="Symfony!"/>
+
+{# the CSS file lives at "public/css/blog.css" #}
+<link href="{{ asset('styles/app.css') }}" rel="stylesheet"/>
 <ul>
         <li>{{ author.name }}</li>
         <li>{{ author.email }}</li>
