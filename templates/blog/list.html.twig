@@ -1,8 +1,13 @@
 <h1>Blog list page</h1>
+<h3>Author info</h3>
 <ul>
+        <li>{{ author.name }}</li>
+        <li>{{ author.email }}</li>
+</ul>
+<ol>
     {%  for tag in slugs %}
         <li>
                 <a href="{{ path('blog_show', {slug: tag}) }}">{{ tag }}</a>
         </li>
     {%  endfor %}
-</ul>
+</ol>
