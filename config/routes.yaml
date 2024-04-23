@@ -13,3 +13,8 @@ blog_list:
     path: /blog/list
     controller: App\Controller\BlogController::list
     methods: GET
+
+app_home:
+    path: /
+    controller: App\Controller\HomeController::index
+    methods: GET|HEAD

@@ -12,6 +12,14 @@
         {% endblock %}
     </head>
     <body>
+        <h1>Layout Title</h1>
+        MENU
+        <ul>
+            <li><a href="{{ path('app_home') }}">Home</a></li>
+            <li><a href="{{ path('blog_list') }}">Blog list</a></li>
+            <li><a href="{{ path('lucky_number_route_name') }}">Lucky number</a></li>
+        </ul>
+        <hr />
         {% block body %}{% endblock %}
     </body>
 </html>
