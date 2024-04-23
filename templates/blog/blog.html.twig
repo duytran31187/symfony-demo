@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
-{% block body %}
 
+{% block title %}Blog {{ slug }}{% endblock %}
+
+{% block body %}
 <h1>Blog detail</h1>
 <h5>Slug {{ slug }}</h5>
 <a href="{{ path('blog_list') }}">Blog list</a>
