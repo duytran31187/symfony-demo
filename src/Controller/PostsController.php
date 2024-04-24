@@ -28,7 +28,7 @@ class PostsController extends AbstractController
         $post = new Posts();
         $form = $this->createForm(PostsType::class, $post);
         $form->handleRequest($request);
-
+        $post->setCreatedAt(new \DateTime());
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($post);
             $entityManager->flush();
