@@ -110,4 +110,14 @@ class ProductController extends AbstractController
 
         return $this->redirectToRoute('product_list');
     }
+
+    #[Route('/products/high', name: 'product_high_price')]
+    public function highPriceProducts(
+        ProductRepository $productRepository
+    ): Response
+    {
+        return $this->render('product/index.html.twig', [
+            'products' => $productRepository->findByPrice(100)
+        ]);
+    }
 }
