@@ -16,8 +16,9 @@ class HomeController extends AbstractController
         MessageGenerator $messageGenerator,
     ): Response
     {
-        return $this->render('home/index.html.twig', [
-            'message' => $messageGenerator->getHappyMessage(),
-        ]);
+        throw new \Exception('Something went wrong!');
+        // return $this->render('home/index.html.twig', [
+        //     'message' => $messageGenerator->getHappyMessage(),
+        // ]);
     }
 }
