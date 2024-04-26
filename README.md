@@ -33,3 +33,5 @@ symfony console make:migration
 sudo apt install php-mysql
 symfony console doctrine:migrations:migrate
 ````
+
+### Technically speaking, Symfony Flex is a Composer plugin that is installed by default when creating a new Symfony application and which automates the most common tasks of Symfony applications.
