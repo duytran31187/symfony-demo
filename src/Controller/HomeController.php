@@ -23,7 +23,6 @@ class HomeController extends AbstractController
         MessageGenerator $messageGenerator
     ): Response
     {
-//        throw new \Exception('Something went wrong!');
         $this->logger->info('home/index route is called'); // second way: inject via constructor
          return $this->render('home/index.html.twig', [
              'message' => $messageGenerator->getHappyMessage(),
@@ -39,5 +38,10 @@ class HomeController extends AbstractController
         dump($kernel->getCacheDir());
         dump($kernel->getProjectDir());
         dd($kernel->getEnvironment());
+    }
+
+    #[Route('/test-exception', name: 'app_home_test_exception')]
+    public function testException(): Response {
+        throw $this->createNotFoundException('This is a test exception');
     }
 }
