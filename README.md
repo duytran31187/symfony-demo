@@ -38,3 +38,6 @@ symfony console doctrine:migrations:migrate
 #### If you extend the base AbstractController, you can only get access to the most common services (e.g twig, router, doctrine, etc.), directly from the container via $this->container->get(). these services can be found under AbstractController->getSubscribedServices().
 unless we have to inject the service manually by:  type-hinting action method arguments (pass the serice directly to the function) OR via construct()
  
+
+### a bundle is similar to a plugin (or a package) in other software. in a symfony app inclues Symfony flex to automatically add/remove a bundle.
+### symfony flex is just a package symfony/flex
