@@ -26,6 +26,7 @@ To create entity
 ````
  ./bin/console make:entity
 ````
+to create relationship, we use make:entity with column name ex: catetory, type:relation => then we have a new column name category_id (if new field name category_id, then the field created with naem category_id_id)
 # we need to install if the command make:migration throw error
 ## after migration created, we need to migrate
 ````

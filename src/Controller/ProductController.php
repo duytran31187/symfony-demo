@@ -3,121 +3,79 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route('/product')]
 class ProductController extends AbstractController
 {
-    #[Route('/products', name: 'product_list')]
-    public function index(
-        ProductRepository $productRepository
-    ): Response
+    #[Route('/', name: 'app_product_index', methods: ['GET'])]
+    public function index(ProductRepository $productRepository): Response
     {
         return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findAll()
+            'products' => $productRepository->findAll(),
         ]);
     }
 
-    #[Route('/product/add', name: 'product_new')]
-    public function createProduct(
-        EntityManagerInterface $entityManager
-    ): Response {
+    #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
         $product = new Product();
-        $product->setName('Keyboard-updated');
-        $product->setPrice(1999);
-        $product->setDescription('Ergonomic and stylish! -updated');
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
 
-        // tell Doctrine you want to (eventually) save the Product (no queries yet)
-        $entityManager->persist($product);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($product);
+            $entityManager->flush();
 
-        // actually executes the queries (i.e. the INSERT query)
-        $entityManager->flush();
-
-        return new Response('Saved new product with id '.$product->getId());
-    }
-// show() or showDetail() can be used to show a single product BUT with different ways to get the product for reference
-
-    #[Route('/product/{id}', name: 'product_show')]
-    public function show(EntityManagerInterface $entityManager, int $id): Response
-    {
-        $product = $entityManager->getRepository(Product::class)->find($id);
-
-        if (!$product) {
-            throw $this->createNotFoundException(
-                'No product found for id '.$id
-            );
+            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return new Response('Check out this great product: '.$product->getName());
-
-        // or render a template
-        // in the template, print things with {{ product.name }}
-        // return $this->render('product/show.html.twig', ['product' => $product]);
-    }
-
-    #[Route('/product/show/{id}', name: 'product_show')]
-    public function showDetail(ProductRepository $productRepository, int $id): Response
-    {
-        $product = $productRepository->find($id);
-
-        if (!$product) {
-            throw $this->createNotFoundException(
-                'No product found for id '.$id
-            );
-        }
-
-        return new Response('Check out this great product: '.$product->getName());
-
-        // or render a template
-        // in the template, print things with {{ product.name }}
-        // return $this->render('product/show.html.twig', ['product' => $product]);
-    }
-
-    #[Route('/product/edit/{id}', name: 'product_edit')]
-    public function update(EntityManagerInterface $entityManager, int $id): Response
-    {
-        $product = $entityManager->getRepository(Product::class)->find($id);
-
-        if (!$product) {
-            throw $this->createNotFoundException(
-                'No product found for id '.$id
-            );
-        }
-
-        $product->setName('New product name!');
-        $entityManager->flush();
-
-        return $this->redirectToRoute('product_show', [
-            'id' => $product->getId()
+        return $this->render('product/new.html.twig', [
+            'product' => $product,
+            'form' => $form,
         ]);
     }
 
-    #[Route('/product/delete/{id}', name: 'product_delete')]
-    public function delete(EntityManagerInterface $entityManager, int $id): Response
+    #[Route('/{id}', name: 'app_product_show', methods: ['GET'])]
+    public function show(Product $product): Response
     {
-        $product = $entityManager->getRepository(Product::class)->find($id);
-
-        if (!$product) {
-            throw $this->createNotFoundException(
-                'No product found for id '.$id
-            );
-        }
-        $entityManager->remove($product);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('product_list');
+        return $this->render('product/show.html.twig', [
+            'product' => $product,
+        ]);
     }
 
-    #[Route('/products/high', name: 'product_high_price')]
-    public function highPriceProducts(
-        ProductRepository $productRepository
-    ): Response
+    #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
-        return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findByPrice(100)
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('product/edit.html.twig', [
+            'product' => $product,
+            'form' => $form,
         ]);
+    }
+
+    #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
+    public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->getPayload()->get('_token'))) {
+            $entityManager->remove($product);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
     }
 }
